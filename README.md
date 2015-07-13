@@ -152,7 +152,7 @@ Can only return photos as base64-encoded image.
 
 #### Firefox OS Quirks
 
-Camera plugin is currently implemented using [Web Activities](https://hacks.mozilla.org/2013/01/introducing-web-activities/). 
+Camera plugin is currently implemented using [Web Activities](https://hacks.mozilla.org/2013/01/introducing-web-activities/).
 
 #### iOS Quirks
 
@@ -188,7 +188,8 @@ Optional parameters to customize the camera settings.
       targetWidth: 100,
       targetHeight: 100,
       popoverOptions: CameraPopoverOptions,
-      saveToPhotoAlbum: false };
+      saveToPhotoAlbum: false,
+      showLibraryButton: false };
 
 - __quality__: Quality of the saved image, expressed as a range of 0-100, where 100 is typically full resolution with no loss from file compression. The default is 50. _(Number)_ (Note that information about the camera's resolution is unavailable.)
 
@@ -242,11 +243,15 @@ Optional parameters to customize the camera settings.
             FRONT : 1      // Use the front-facing camera
         };
 
+- __showLibraryButton__: When `sourceType` is `Camera.PictureSourceType.CAMERA`, this provides a way for the user to choose whether they want to capture the picture from the camera or select from the library. The behavior varies slightly based on the device, as not all devices provide a clean way to do this with their default applications. See the Quirks section below for details on platform-specific behaviors.
+
 #### Amazon Fire OS Quirks
 
 - Any `cameraDirection` value results in a back-facing photo.
 
 - Ignores the `allowEdit` parameter.
+
+- Ignores the `showLibraryButton` parameter.
 
 - `Camera.PictureSourceType.PHOTOLIBRARY` and `Camera.PictureSourceType.SAVEDPHOTOALBUM` both display the same photo album.
 
@@ -254,10 +259,12 @@ Optional parameters to customize the camera settings.
 
 - Any `cameraDirection` value results in a back-facing photo.
 
-- Android also uses the Crop Activity for allowEdit, even though crop should work and actually pass the cropped image back to Cordova, the only one that works consistently is the one bundled 
+- Android also uses the Crop Activity for allowEdit, even though crop should work and actually pass the cropped image back to Cordova, the only one that works consistently is the one bundled
 with the Google Plus Photos application.  Other crops may not work.
 
 - `Camera.PictureSourceType.PHOTOLIBRARY` and `Camera.PictureSourceType.SAVEDPHOTOALBUM` both display the same photo album.
+
+- When `showLibraryButton` is `true`, an Intent chooser is displayed which lists all possible handlers for either the Camera or File chooser -- and the user can then pick which method they would prefer to use to capture the image.
 
 #### BlackBerry 10 Quirks
 
@@ -270,6 +277,8 @@ with the Google Plus Photos application.  Other crops may not work.
 - Ignores the `correctOrientation` parameter.
 
 - Ignores the `cameraDirection` parameter.
+
+- Ignores the `showLibraryButton` parameter.
 
 #### Firefox OS Quirks
 
@@ -291,11 +300,15 @@ with the Google Plus Photos application.  Other crops may not work.
 
 - Ignores the `cameraDirection` parameter.
 
+- Ignores the `showLibraryButton` parameter.
+
 #### iOS Quirks
 
 - Set `quality` below 50 to avoid memory errors on some devices.
 
 - When using `destinationType.FILE_URI`, photos are saved in the application's temporary directory. The contents of the application's temporary directory is deleted when the application ends.
+
+- `showLibraryButton` adds a `Library` button to the default camera controls. For iPhone, this is on the lower right. For iPad, this is halfway between the shutter and `Cancel` buttons. The button is shown as the text `Library`, unless the app has access to the photo library already, in which case a thumbnail of the most recent image is provided. This is only supported on iOS 7+.
 
 #### Tizen Quirks
 
@@ -316,6 +329,7 @@ You may also comment or up-vote the related issue in the [issue tracker](https:/
 
 - Ignores the `mediaType` property of `cameraOptions` as the Windows Phone SDK does not provide a way to choose videos from PHOTOLIBRARY.
 
+- `showLibraryButton` launches directly into the photo chooser task, and provides a camera button at the bottom to allow the user to toggle over into the camera.
 
 ## CameraError
 
